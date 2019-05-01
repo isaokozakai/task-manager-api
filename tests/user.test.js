@@ -27,6 +27,30 @@ test('Should signup a new user', async () => {
   expect(user.password).not.toBe('myPass999')
 })
 
+test('Should not signup user with invalid name', async () => {
+  await request(app).post('/users').send({
+      name: '',
+      email: 'isao@test.jp',
+      password: 'MYPPPaaa000'
+    }).expect(400)
+})
+
+test('Should not signup user with invalid email', async () => {
+  await request(app).post('/users').send({
+      name: 'Isao',
+      email: 'isaoio.io',
+      password: 'MYPPPaaa000'
+    }).expect(400)
+})
+
+test('Should not signup user with invalid password', async () => {
+  await request(app).post('/users').send({
+      name: 'Isao',
+      email: 'isao4@io.io',
+      password: 'MYP000'
+    }).expect(400)
+})
+
 test('Should login existing user', async () => {
   const response = await request(app).post('/users/login').send({
     email: userOne.email,
@@ -95,6 +119,45 @@ test('Should update valid user fields', async () => {
     .expect(200)
   const user = await User.findById(userOneId)
   expect(user.name).toEqual('Mikie')
+})
+
+test('Should not update user if unauthenticated', async () => {
+  await request(app)
+    .patch('/users/me')
+    .send({
+      name: 'Mikie'
+    })
+    .expect(401)
+})
+
+test('Should not update user with invalid name', async () => {
+  await request(app)
+    .patch('/users/me')
+    .send({
+      name: ''
+    })
+    .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+    .expect(400)
+})
+
+test('Should not update user with invalid email', async () => {
+  await request(app)
+    .patch('/users/me')
+    .send({
+      email: 'testemail'
+    })
+    .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+    .expect(400)
+})
+
+test('Should not update user with invalid password', async () => {
+  await request(app)
+    .patch('/users/me')
+    .send({
+      email: 'PasSwoRd2233'
+    })
+    .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+    .expect(400)
 })
 
 test('Should not update invalid user fields', async () => {
