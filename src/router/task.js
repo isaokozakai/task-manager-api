@@ -11,7 +11,7 @@ router.post('/tasks', auth, async (req, res) => {
 
   try {
     await task.save()
-      res.status(201).send(task)
+    res.status(201).send(task)
   } catch (e) {
       res.status(400).send(e)
   }
@@ -58,7 +58,7 @@ router.get('/tasks/:id', auth, async (req, res) => {
 
     res.send(task)
   } catch (e) {
-    res.status(500).send()
+      res.status(500).send()
   }
 })
 
@@ -83,7 +83,10 @@ router.patch('/tasks/:id', auth, async (req, res) => {
 
     res.send(task)
   } catch (e) {
-    res.status(500).send(e)
+    if (e.name == 'ValidationError') {
+      res.status(400).send(e)
+    } else {
+        res.status(500).send(e)}
   }
 })
 

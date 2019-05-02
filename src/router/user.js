@@ -25,7 +25,7 @@ router.post('/users/login', async (req, res) => {
     const token = await user.generateAuthToken()
     res.send({ user, token })
   } catch (e) {
-    res.status(400).send(e)
+      res.status(400).send(e)
   }
 })
 
@@ -38,7 +38,7 @@ router.post('/users/logout', auth, async (req, res) => {
 
     res.send()
   } catch (e) {
-    res.status(500).send()
+      res.status(500).send()
   }
 })
 
@@ -48,7 +48,7 @@ router.post('/users/logoutAll', auth, async (req, res) => {
     await req.user.save()
     res.send()
   } catch (e) {
-    res.status(500).send()
+      res.status(500).send()
   }
 })
 
@@ -70,7 +70,7 @@ router.patch('/users/me', auth, async (req, res) => {
     await req.user.save()
     res.send(req.user)
   } catch (e) {
-    res.status(400).send(e)
+      res.status(400).send(e)
   }
 })
 
@@ -80,7 +80,7 @@ router.delete('/users/me', auth, async (req, res) => {
     sendCancelationEmail(req.user.email, req.user.name)
     res.send(req.user)
   } catch (e) {
-    res.status(500).send(e)
+      res.status(500).send(e)
   }
 })
 
@@ -122,7 +122,7 @@ router.get('/users/:id/avatar', async (req, res) => {
     res.set('Content-Type', 'image/jpg')
     res.send(user.avatar)
   } catch (e) {
-    res.status(404).send()
+      res.status(404).send()
   }
 })
 
